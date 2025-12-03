@@ -11,6 +11,9 @@ export default defineConfig({
       'react-dom': path.resolve('./node_modules/react-dom')
     }
   },
+  build: {
+    outDir: 'build'
+  },
   server: {
     port: 3001,
     hmr: {
