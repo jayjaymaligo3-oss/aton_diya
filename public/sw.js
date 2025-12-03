@@ -22,47 +22,47 @@ self.addEventListener('install', (event) => {
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Cache hit - return response
-        if (response) {
-          return response;
+    (async function() {
+      // Bypass the service worker for cross-origin requests to avoid CORS/opaque failures
+      try {
+        const reqUrl = new URL(event.request.url);
+        if (reqUrl.origin !== location.origin) {
+          // For external requests, just fetch from network and don't try to cache
+          return fetch(event.request).catch((err) => {
+            console.warn('Cross-origin fetch failed for', event.request.url, err);
+            return new Response('Service Unavailable', { status: 503, statusText: 'Service Unavailable' });
+          });
         }
-        
-        // Clone the request
+
+        // Same-origin requests: try cache first
+        const cached = await caches.match(event.request);
+        if (cached) return cached;
+
         const fetchRequest = event.request.clone();
-        
-        return fetch(fetchRequest).then((response) => {
-          // Check if valid response
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-
-          // Clone the response
-          const responseToCache = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-
-          return response;
-        }).catch((err) => {
-          // Handle network errors (e.g. offline, DNS failure)
+        const networkResponse = await fetch(fetchRequest).catch((err) => {
           console.warn('Service Worker fetch failed for', event.request.url, err);
-
-          // If this was a navigation request, try returning the cached app shell
+          // On failed navigation fallback to app shell
           if (event.request.mode === 'navigate') {
             return caches.match('/index.html');
           }
-
-          // For other requests return a generic 503 Response so the page can handle it
-          return new Response('Service Unavailable', {
-            status: 503,
-            statusText: 'Service Unavailable'
-          });
+          return new Response('Service Unavailable', { status: 503, statusText: 'Service Unavailable' });
         });
-      })
+
+        // If we already returned a fallback Response from the catch above, return it
+        if (!networkResponse) return new Response('Service Unavailable', { status: 503, statusText: 'Service Unavailable' });
+
+        // Check if valid response and cache it
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+        }
+
+        return networkResponse;
+      } catch (ex) {
+        console.error('Unexpected error in SW fetch handler', ex);
+        return new Response('Service Unavailable', { status: 503, statusText: 'Service Unavailable' });
+      }
+    })()
   );
 });
 
