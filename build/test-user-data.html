@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test User Data - Aton Diya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #1a3409 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+        
+        h2 {
+            color: #2d5016;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #2d5016, #ff8c42);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #2d5016;
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-customer {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .badge-vendor {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .badge-admin {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        
+        .badge-active {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .badge-pending {
+            background: #fff9c4;
+            color: #f57f17;
+        }
+        
+        .btn {
+            background: #ff8c42;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #e67a32;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #2d5016;
+        }
+        
+        .btn-secondary:hover {
+            background: #1a3409;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 User Data Test</h1>
+        
+        <!-- Stats -->
+        <div class="card">
+            <h2>Statistics</h2>
+            <div class="stats" id="stats"></div>
+        </div>
+        
+        <!-- Users -->
+        <div class="card">
+            <h2>All Users</h2>
+            <div id="usersTable"></div>
+        </div>
+        
+        <!-- Vendors -->
+        <div class="card">
+            <h2>Vendors</h2>
+            <div id="vendorsTable"></div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="card" style="text-align: center;">
+            <button class="btn" onclick="refreshData()">🔄 Refresh Data</button>
+            <button class="btn btn-secondary" onclick="window.location.href='/admin/dashboard'">
+                👤 Go to Admin Dashboard
+            </button>
+            <button class="btn btn-secondary" onclick="window.location.href='/'">
+                🏠 Go to Home
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function loadData() {
+            // Load from localStorage
+            const globalUsers = JSON.parse(localStorage.getItem('global_users') || '[]');
+            const globalVendors = JSON.parse(localStorage.getItem('global_vendors') || '[]');
+            const globalOrders = JSON.parse(localStorage.getItem('global_orders') || '[]');
+            const globalProducts = JSON.parse(localStorage.getItem('global_products') || '[]');
+            
+            // Display stats
+            const statsHtml = `
+                <div class="stat-box">
+                    <div class="stat-number">${globalUsers.length}</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">${globalVendors.length}</div>
+                    <div class="stat-label">Vendors</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">${globalOrders.length}</div>
+                    <div class="stat-label">Orders</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">${globalProducts.length}</div>
+                    <div class="stat-label">Products</div>
+                </div>
+            `;
+            document.getElementById('stats').innerHTML = statsHtml;
+            
+            // Display users
+            if (globalUsers.length === 0) {
+                document.getElementById('usersTable').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👥</div>
+                        <p>No users found. Register or login to add users.</p>
+                    </div>
+                `;
+            } else {
+                let usersHtml = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Orders</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                globalUsers.forEach(user => {
+                    const roleClass = `badge-${user.role}`;
+                    const statusClass = user.status === 'active' ? 'badge-active' : 'badge-pending';
+                    const joinDate = user.joinDate || (user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A');
+                    
+                    usersHtml += `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                            <td><span class="badge ${roleClass}">${user.role}</span></td>
+                            <td><span class="badge ${statusClass}">${user.status || 'active'}</span></td>
+                            <td>${user.orders || 0}</td>
+                            <td>${joinDate}</td>
+                        </tr>
+                    `;
+                });
+                
+                usersHtml += '</tbody></table>';
+                document.getElementById('usersTable').innerHTML = usersHtml;
+            }
+            
+            // Display vendors
+            if (globalVendors.length === 0) {
+                document.getElementById('vendorsTable').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🏪</div>
+                        <p>No vendors found. Register as vendor to add.</p>
+                    </div>
+                `;
+            } else {
+                let vendorsHtml = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Business Name</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Products</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                globalVendors.forEach(vendor => {
+                    const statusClass = vendor.status === 'approved' ? 'badge-active' : 'badge-pending';
+                    const productCount = globalProducts.filter(p => p.vendorId === vendor.userId).length;
+                    const createdDate = vendor.createdAt ? new Date(vendor.createdAt).toLocaleDateString() : 'N/A';
+                    
+                    vendorsHtml += `
+                        <tr>
+                            <td>${vendor.id}</td>
+                            <td>${vendor.businessName || 'N/A'}</td>
+                            <td>${vendor.category || 'N/A'}</td>
+                            <td><span class="badge ${statusClass}">${vendor.status}</span></td>
+                            <td>${productCount}</td>
+                            <td>${createdDate}</td>
+                        </tr>
+                    `;
+                });
+                
+                vendorsHtml += '</tbody></table>';
+                document.getElementById('vendorsTable').innerHTML = vendorsHtml;
+            }
+            
+            console.log('📊 Data loaded:', {
+                users: globalUsers,
+                vendors: globalVendors,
+                orders: globalOrders,
+                products: globalProducts
+            });
+        }
+        
+        function refreshData() {
+            loadData();
+            alert('✅ Data refreshed!');
+        }
+        
+        // Load data on page load
+        loadData();
+    </script>
+</body>
+</html>

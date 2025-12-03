@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check localStorage</title>
+</head>
+<body>
+    <h1>localStorage Data Check</h1>
+    <button onclick="checkData()">Check Data</button>
+    <button onclick="clearData()">Clear All Data</button>
+    <button onclick="reinitialize()">Reinitialize Data</button>
+    <pre id="output"></pre>
+
+    <script>
+        function checkData() {
+            const output = document.getElementById('output');
+            const users = JSON.parse(localStorage.getItem('global_users') || '[]');
+            const vendors = JSON.parse(localStorage.getItem('global_vendors') || '[]');
+            const orders = JSON.parse(localStorage.getItem('global_orders') || '[]');
+            const products = JSON.parse(localStorage.getItem('global_products') || '[]');
+            const initialized = localStorage.getItem('transactions_initialized');
+            
+            output.textContent = `
+Initialized: ${initialized}
+Users: ${users.length}
+Vendors: ${vendors.length}
+Orders: ${orders.length}
+Products: ${products.length}
+
+Users Data:
+${JSON.stringify(users, null, 2)}
+
+Vendors Data:
+${JSON.stringify(vendors, null, 2)}
+
+Orders Data:
+${JSON.stringify(orders, null, 2)}
+
+Products Data:
+${JSON.stringify(products, null, 2)}
+            `;
+        }
+
+        function clearData() {
+            localStorage.removeItem('global_users');
+            localStorage.removeItem('global_vendors');
+            localStorage.removeItem('global_orders');
+            localStorage.removeItem('global_products');
+            localStorage.removeItem('transactions_initialized');
+            alert('Data cleared! Refresh the main app to reinitialize.');
+        }
+
+        function reinitialize() {
+            clearData();
+            window.location.href = '/';
+        }
+
+        // Auto-check on load
+        checkData();
+    </script>
+</body>
+</html>
