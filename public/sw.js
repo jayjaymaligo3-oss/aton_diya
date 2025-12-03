@@ -37,16 +37,30 @@ self.addEventListener('fetch', (event) => {
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
-          
+
           // Clone the response
           const responseToCache = response.clone();
-          
+
           caches.open(CACHE_NAME)
             .then((cache) => {
               cache.put(event.request, responseToCache);
             });
-          
+
           return response;
+        }).catch((err) => {
+          // Handle network errors (e.g. offline, DNS failure)
+          console.warn('Service Worker fetch failed for', event.request.url, err);
+
+          // If this was a navigation request, try returning the cached app shell
+          if (event.request.mode === 'navigate') {
+            return caches.match('/index.html');
+          }
+
+          // For other requests return a generic 503 Response so the page can handle it
+          return new Response('Service Unavailable', {
+            status: 503,
+            statusText: 'Service Unavailable'
+          });
         });
       })
   );
