@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="description" content="Aton Diya E-Palengke Bulalacao - A Digital Marketplace for Indigenous and Local Products of Bulalacao, Oriental Mindoro" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2D5F3F" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Aton Diya" />
+    <link rel="apple-touch-icon" href="/logo.jpg" />
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Aton Diya E-Palengke Bulalacao" />
+    <meta property="og:description" content="Digital Marketplace for Indigenous and Local Products" />
+    <meta property="og:image" content="/logo.jpg" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Aton Diya E-Palengke Bulalacao" />
+    <meta name="twitter:description" content="Digital Marketplace for Indigenous and Local Products" />
+    <meta name="twitter:image" content="/logo.jpg" />
+    
+    <title>Aton Diya E-Palengke Bulalacao</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>

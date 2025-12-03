@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restart Storage - Aton Diya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #1a3409 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #2d5016;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        
+        .btn {
+            background: #ff8c42;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: #e67a32;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 140, 66, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #2d5016;
+        }
+        
+        .btn-secondary:hover {
+            background: #1a3409;
+        }
+        
+        .status {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+            display: block;
+        }
+        
+        .progress {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #2d5016, #ff8c42);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .countdown {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ff8c42;
+            margin: 20px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🔄</div>
+        <h1>Restart Storage</h1>
+        <p>Clear all localStorage data and reload with fresh products featuring unique images.</p>
+        
+        <button class="btn" onclick="restartStorage()">
+            🚀 Restart Now
+        </button>
+        <a href="/" class="btn btn-secondary">
+            ← Back to Home
+        </a>
+        
+        <div class="progress" id="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="countdown" id="countdown"></div>
+        
+        <div class="status" id="status"></div>
+    </div>
+
+    <script>
+        function updateProgress(percent) {
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = percent + '%';
+        }
+        
+        function showCountdown(seconds) {
+            const countdown = document.getElementById('countdown');
+            countdown.style.display = 'block';
+            countdown.textContent = seconds;
+            
+            if (seconds > 0) {
+                setTimeout(() => showCountdown(seconds - 1), 1000);
+            }
+        }
+        
+        async function restartStorage() {
+            const status = document.getElementById('status');
+            const progress = document.getElementById('progress');
+            
+            // Show progress
+            progress.style.display = 'block';
+            updateProgress(10);
+            
+            // Step 1: Clear localStorage
+            status.className = 'status success';
+            status.style.display = 'block';
+            status.innerHTML = '🗑️ Clearing old data...';
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            localStorage.clear();
+            updateProgress(30);
+            
+            // Step 2: Clear specific items
+            status.innerHTML = '🧹 Cleaning up...';
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            const keysToRemove = [
+                'global_products',
+                'global_orders',
+                'global_users',
+                'global_vendors',
+                'global_notifications',
+                'cart',
+                'wishlist',
+                'authenticated',
+                'token',
+                'demoUser',
+                'registeredUsers',
+                'vendorApplications',
+                'customerOrders'
+            ];
+            
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+            updateProgress(60);
+            
+            // Step 3: Success message
+            status.innerHTML = '✅ Storage cleared successfully!<br>🖼️ New products with unique images will load...';
+            updateProgress(90);
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            updateProgress(100);
+            
+            // Step 4: Countdown and redirect
+            status.innerHTML = '✅ Complete! Redirecting to home page...';
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            showCountdown(3);
+            
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

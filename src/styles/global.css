@@ -1,0 +1,355 @@
+/* Global Styles - Aton Diya E-Palengke Bulalacao */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #FDFBF7;
+  color: #0F2922;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Indigenous Pattern Overlay */
+.pattern-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.pattern-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(27, 77, 62, 0.03) 10px, rgba(27, 77, 62, 0.03) 20px),
+    repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(90, 58, 34, 0.02) 10px, rgba(90, 58, 34, 0.02) 20px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Woven Texture Background */
+.woven-texture {
+  background-image: 
+    linear-gradient(90deg, rgba(217, 180, 143, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(217, 180, 143, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Cinematic Fade In Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes gentleZoom {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.gentle-float {
+  animation: gentleFloat 3s ease-in-out infinite;
+}
+
+/* Organic Button Styles */
+.btn-organic {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+
+.btn-organic::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-organic:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Wooden Frame Effect */
+.wooden-frame {
+  border: 8px solid;
+  border-image: linear-gradient(135deg, #5A3A22, #3d2617, #5A3A22) 1;
+  box-shadow: 
+    inset 0 0 20px rgba(90, 58, 34, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Basket Card Style */
+.basket-card {
+  background: linear-gradient(135deg, #F5F1E8 0%, #FDFBF7 100%);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.basket-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: transparent;
+  border-radius: 20px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.basket-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(27, 77, 62, 0.2);
+}
+
+.basket-card:hover::before {
+  opacity: 0;
+}
+
+/* Tribal Icon Wrapper */
+.tribal-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1B4D3E, #0F2922);
+  box-shadow: 0 4px 15px rgba(27, 77, 62, 0.3);
+}
+
+.tribal-icon::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(45deg, #E2953A, #C9A961);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/* Parallax Container */
+.parallax-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax-bg {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+
+/* Cinematic Glow */
+.cinematic-glow {
+  position: relative;
+}
+
+.cinematic-glow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(226, 149, 58, 0.1), transparent 70%);
+  pointer-events: none;
+}
+
+/* Woven Text Background */
+.woven-text {
+  background: linear-gradient(135deg, #1B4D3E 0%, #0F2922 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.woven-text::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  z-index: -1;
+  background: linear-gradient(135deg, #E2953A 0%, #C9A961 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth Transitions */
+.smooth-transition {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading Spinner with Indigenous Pattern */
+.spinner-indigenous {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #F5F1E8;
+  border-top: 4px solid #1B4D3E;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F5F1E8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #1B4D3E, #0F2922);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #0F2922, #1B4D3E);
+}
+
+/* Enhanced Text Visibility */
+.text-shadow-strong {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.text-shadow-medium {
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.text-shadow-light {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced Drop Shadow for Better Readability */
+.drop-shadow-strong {
+  filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #E2953A 0%, #C9A961 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced Card Hover Effects */
+.basket-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(27, 77, 62, 0.25);
+}
+
+/* Better Button Shadows */
+.btn-organic {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.btn-organic:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Improved Section Backgrounds */
+.section-gradient-warm {
+  background: linear-gradient(135deg, #FDFBF7 0%, #F5F1E8 50%, #D9B48F 100%);
+}
+
+.section-gradient-cool {
+  background: linear-gradient(135deg, #1B4D3E 0%, #0F2922 50%, #5A3A22 100%);
+}
+
+/* Z-Index Layering System */
+/* Ensures proper stacking order: modals > navbar > content */
+.z-modal-backdrop {
+  z-index: 9998 !important;
+}
+
+.z-modal-content {
+  z-index: 9999 !important;
+}
+
+.z-navbar {
+  z-index: 50 !important;
+}
+
+.z-login-page {
+  z-index: 10000 !important;
+}

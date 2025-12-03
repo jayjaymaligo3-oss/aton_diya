@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Storage - Aton Diya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #1a3409 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #2d5016;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            background: #ff8c42;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            background: #e67a32;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 140, 66, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #2d5016;
+        }
+        
+        .btn-secondary:hover {
+            background: #1a3409;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+        
+        .storage-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .storage-info h3 {
+            color: #2d5016;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .storage-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Clear Storage</h1>
+        <p>I-clear ang localStorage para sa fresh start ng authentication system.</p>
+        
+        <div class="storage-info" id="storageInfo">
+            <h3>Current localStorage items:</h3>
+            <div id="storageItems"></div>
+        </div>
+        
+        <button class="btn" onclick="clearStorage()">Clear All Storage</button>
+        <button class="btn btn-secondary" onclick="goToLogin()">Go to Login</button>
+        
+        <div class="status" id="status"></div>
+    </div>
+
+    <script>
+        // Display current localStorage items
+        function displayStorage() {
+            const container = document.getElementById('storageItems');
+            const items = [];
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                items.push(`<div class="storage-item"><strong>${key}:</strong> ${value.substring(0, 50)}${value.length > 50 ? '...' : ''}</div>`);
+            }
+            
+            if (items.length === 0) {
+                container.innerHTML = '<div class="storage-item">No items in localStorage ✅</div>';
+            } else {
+                container.innerHTML = items.join('');
+            }
+        }
+        
+        // Clear localStorage
+        function clearStorage() {
+            const itemCount = localStorage.length;
+            localStorage.clear();
+            
+            const status = document.getElementById('status');
+            status.className = 'status success';
+            status.innerHTML = `✅ Successfully cleared ${itemCount} item(s) from localStorage!<br><br>You can now login with fresh credentials.`;
+            
+            displayStorage();
+            
+            // Auto redirect after 2 seconds
+            setTimeout(() => {
+                status.className = 'status info';
+                status.innerHTML = '🔄 Redirecting to login page...';
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1000);
+            }, 2000);
+        }
+        
+        // Go to login
+        function goToLogin() {
+            window.location.href = '/login';
+        }
+        
+        // Display storage on load
+        displayStorage();
+    </script>
+</body>
+</html>

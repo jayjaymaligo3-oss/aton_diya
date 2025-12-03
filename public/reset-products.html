@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Products - Aton Diya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #1a3409 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #2d5016;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .warning-title {
+            color: #856404;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .warning-text {
+            color: #856404;
+            font-size: 14px;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .info-box h3 {
+            color: #2d5016;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .info-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .btn {
+            background: #ff8c42;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            width: calc(50% - 20px);
+        }
+        
+        .btn:hover {
+            background: #e67a32;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 140, 66, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #2d5016;
+        }
+        
+        .btn-secondary:hover {
+            background: #1a3409;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+            display: block;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+            display: block;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Reset Product Data</h1>
+        <p>Manage your product database and fix image issues.</p>
+        
+        <div class="warning">
+            <div class="warning-title">⚠️ Warning</div>
+            <div class="warning-text">
+                Resetting will clear all existing products and reload with 20 new products with working images.
+            </div>
+        </div>
+        
+        <div class="info-box" id="currentInfo">
+            <h3>Current Data:</h3>
+            <div id="dataInfo"></div>
+        </div>
+        
+        <div class="button-group">
+            <button class="btn btn-danger" onclick="resetProducts()">
+                🔄 Reset Products
+            </button>
+            <button class="btn" onclick="fixImages()">
+                🖼️ Fix Images Only
+            </button>
+            <button class="btn btn-secondary" onclick="viewProducts()">
+                👁️ View Products
+            </button>
+            <button class="btn btn-secondary" onclick="goToHome()">
+                🏠 Go to Home
+            </button>
+        </div>
+        
+        <div class="status" id="status"></div>
+    </div>
+
+    <script type="module">
+        // Display current data
+        function displayCurrentData() {
+            const container = document.getElementById('dataInfo');
+            const products = JSON.parse(localStorage.getItem('global_products') || '[]');
+            const orders = JSON.parse(localStorage.getItem('global_orders') || '[]');
+            const users = JSON.parse(localStorage.getItem('global_users') || '[]');
+            
+            const productsWithImages = products.filter(p => p.image && p.image !== '').length;
+            const productsWithoutImages = products.length - productsWithImages;
+            
+            container.innerHTML = `
+                <div class="info-item">📦 Total Products: <strong>${products.length}</strong></div>
+                <div class="info-item">✅ With Images: <strong>${productsWithImages}</strong></div>
+                <div class="info-item">❌ Without Images: <strong>${productsWithoutImages}</strong></div>
+                <div class="info-item">📋 Orders: <strong>${orders.length}</strong></div>
+                <div class="info-item">👥 Users: <strong>${users.length}</strong></div>
+            `;
+        }
+        
+        // Reset all products
+        window.resetProducts = function() {
+            if (!confirm('Are you sure you want to reset all products? This will clear existing data.')) {
+                return;
+            }
+            
+            // Clear products
+            localStorage.removeItem('global_products');
+            
+            const status = document.getElementById('status');
+            status.className = 'status success';
+            status.innerHTML = '✅ Products cleared! Reloading page to initialize new products...';
+            
+            // Reload page after 2 seconds
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 2000);
+        };
+        
+        // Fix images only
+        window.fixImages = function() {
+            const products = JSON.parse(localStorage.getItem('global_products') || '[]');
+            
+            if (products.length === 0) {
+                alert('No products found. Please reset products first.');
+                return;
+            }
+            
+            // Update products with unique Picsum images
+            const updatedProducts = products.map(product => {
+                const seed = `product-${product.id}-${product.name.toLowerCase().replace(/\s+/g, '-')}`;
+                const picsumImage = `https://picsum.photos/seed/${seed}/400/400`;
+                
+                const category = product.category || 'Handicrafts';
+                const colors = {
+                    'Handicrafts': '8B4513',
+                    'Textiles': 'DC143C',
+                    'Home Decor': 'FF8C00',
+                    'Kitchenware': '4682B4',
+                    'Accessories': 'DA70D6',
+                    'Furniture': '8B4513',
+                    'Art & Paintings': 'FF1493',
+                    'Jewelry': 'FFD700',
+                    'Bags & Baskets': '228B22',
+                    'Traditional Wear': '9370DB'
+                };
+                const color = colors[category] || '808080';
+                const fallback = `https://via.placeholder.com/400x400/${color}/FFFFFF?text=${encodeURIComponent(category)}`;
+                
+                return {
+                    ...product,
+                    image: picsumImage,
+                    fallbackImage: fallback
+                };
+            });
+            
+            localStorage.setItem('global_products', JSON.stringify(updatedProducts));
+            
+            const status = document.getElementById('status');
+            status.className = 'status success';
+            status.innerHTML = `✅ Fixed images for ${updatedProducts.length} products with unique photos! Reloading...`;
+            
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        };
+        
+        // View products
+        window.viewProducts = function() {
+            window.location.href = '/products';
+        };
+        
+        // Go to home
+        window.goToHome = function() {
+            window.location.href = '/';
+        };
+        
+        // Display data on load
+        displayCurrentData();
+    </script>
+</body>
+</html>
